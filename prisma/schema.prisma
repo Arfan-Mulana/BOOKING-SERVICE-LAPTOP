@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -21,6 +20,7 @@ model User {
   password   String
   role       Role        @default(User)
   pengajuans Pengajuan[]
+  struks     Struk[]
 }
 
 model Pengajuan {
@@ -28,13 +28,22 @@ model Pengajuan {
   user_id     Int
   merk_laptop String
   seri_laptop String
+  kota        String
   penjelasan  String
   createdat   DateTime @default(now())
   user        User     @relation(fields: [user_id], references: [id])
+  struks      Struk[]
 }
 
 model Struk {
-  id Int @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
+  user_id                  Int
+  pengajuan_id             Int
+  penanggung_jawab_service String
+  kebutuhan                Json
+  total_biaya              String
+  pengajuan                Pengajuan @relation(fields: [pengajuan_id], references: [id])
+  user                     User      @relation(fields: [user_id], references: [id])
 }
 
 enum Role {
