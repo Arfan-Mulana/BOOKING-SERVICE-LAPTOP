@@ -52,3 +52,59 @@ export const addPengajuan = async (req, res) => {
     });
   }
 };
+
+export const updatePengajuan = async (req, res) => {
+  const { userID, merk_laptop, seri_laptop, kota, penjelasan } = req.body;
+  try {
+    const update = await prisma.pengajuan.updateMany({
+      where: { id: Number(req.params.id) },
+      data: {
+        user: { connect: { userID } },
+        merk_laptop,
+        seri_laptop,
+        kota,
+        penjelasan,
+      },
+    });
+    if (!update) {
+      res.status(404).json({
+        Message: "Gagal melakukan update akun!",
+        Information: [],
+      });
+    }
+    const find = await prisma.pengajuan.findMany({
+      where: { user_id: Number(req.params.userId) },
+      include: { user: true },
+    });
+
+    const userSafe = find.map((item) => {
+      const user = { ...item };
+      delete user.user.password;
+
+      const reStructuring = {
+        Pengguna: user.user,
+        Booking: {
+          userID: item.user_id,
+          Kota: item.kota,
+          Merek_Laptop: item.merk_laptop,
+          Seri_Laptop: item.seri_laptop,
+          Penjelasan_Kerusakan: item.penjelasan,
+          Di_Ajukan_Pada: item.createdat,
+        },
+      };
+
+      return reStructuring;
+    });
+
+    res.status(200).json({
+      Message: "Berhasil melakukan update pada pengajuan",
+      Information: userSafe,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      Message: "Error ->",
+      Information: error.message,
+    });
+  }
+};
