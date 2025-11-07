@@ -73,7 +73,7 @@ export const LogIn = async (req, res) => {
 
     const userSafe = { ...find };
     delete userSafe.password;
-    const token = jwt.sign(userSafe, secretKey, { expiresIn: "10S" });
+    const token = jwt.sign(userSafe, secretKey, { expiresIn: "1d" });
 
     res.status(200).json({
       Message: "Berhasil Log In!",
@@ -96,7 +96,7 @@ export const deltAcc = async (req, res) => {
       where: { id: Number(req.params.id) },
     });
     if (!delt) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "User tidak tersedia!?",
         Information: [],
       });
@@ -131,7 +131,7 @@ export const updateAcc = async (req, res) => {
       },
     });
     if (!update) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Tidak bisa menemukan akun tersebut!?",
         Information: [],
       });
@@ -142,7 +142,7 @@ export const updateAcc = async (req, res) => {
     });
 
     if (!find) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Tidak bisa menemukan akun tersebut!",
         Information: [],
       });
@@ -198,7 +198,7 @@ export const finAcc = async (req, res) => {
       },
     });
     if (!find || find.length === 0) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Akun tidak ditemukan!",
         Information: [],
       });

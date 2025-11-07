@@ -33,7 +33,7 @@ export const addPengajuan = async (req, res) => {
     };
 
     if (!add) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Error ketika mengajukan booking service!",
         Information: [],
       });
@@ -67,7 +67,7 @@ export const updatePengajuan = async (req, res) => {
       },
     });
     if (!update) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Gagal melakukan update akun!",
         Information: [],
       });
@@ -117,7 +117,7 @@ export const findPengajuan = async (req, res) => {
       include: { user: true },
     });
     if (!find) {
-      res.status(404).json({
+      return res.status(404).json({
         Message: "Tidak bisa menemukan pengajuan tersebut!!",
         Information: [],
       });
