@@ -108,3 +108,49 @@ export const updatePengajuan = async (req, res) => {
     });
   }
 };
+
+export const findPengajuan = async (req, res) => {
+  const userID = req.body.userID || req.params.userID;
+  try {
+    const find = await prisma.pengajuan.findMany({
+      where: { user_id: userID },
+      include: { user: true },
+    });
+    if (!find) {
+      res.status(404).json({
+        Message: "Tidak bisa menemukan pengajuan tersebut!!",
+        Information: [],
+      });
+    }
+
+    const userSafe = find.map((item) => {
+      const user = { ...item };
+      delete user.user.password;
+
+      const reStructuring = {
+        Pengguna: user.user,
+        Booking: {
+          userID: item.user_id,
+          Kota: item.kota,
+          Merek_Laptop: item.merk_laptop,
+          Seri_Laptop: item.seri_laptop,
+          Penjelasan_Kerusakan: item.penjelasan,
+          Di_Ajukan_Pada: item.createdat,
+        },
+      };
+
+      return reStructuring;
+    });
+
+    res.status(200).json({
+      Message: "Berhasil menemukan pengajuan tersebut!",
+      Information: userSafe,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      Message: "Error ->",
+      Information: error.message,
+    });
+  }
+};

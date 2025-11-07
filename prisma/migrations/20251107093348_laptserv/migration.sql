@@ -19,6 +19,7 @@ CREATE TABLE `Pengajuan` (
     `kota` VARCHAR(191) NOT NULL,
     `penjelasan` VARCHAR(191) NOT NULL,
     `createdat` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `status` ENUM('Menunggu', 'Diterima', 'Ditolak') NOT NULL DEFAULT 'Menunggu',
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
