@@ -21,13 +21,15 @@ export const addPengajuan = async (req, res) => {
     const userSafe = { ...add };
     delete userSafe.user.password;
     const reStructuring = {
-      Pengguna: userSafe,
-      userID: add.user_id,
-      Kota: add.kota,
-      Merek_Laptop: add.merk_laptop,
-      Seri_Laptop: add.seri_laptop,
-      Penjelasan_Kerusakan: add.penjelasan,
-      Di_Ajukan_Pada: add.createdat,
+      Pengguna: userSafe.user,
+      Booking: {
+        userID: add.user_id,
+        Kota: add.kota,
+        Merek_Laptop: add.merk_laptop,
+        Seri_Laptop: add.seri_laptop,
+        Penjelasan_Kerusakan: add.penjelasan,
+        Di_Ajukan_Pada: add.createdat,
+      },
     };
 
     if (!add) {
